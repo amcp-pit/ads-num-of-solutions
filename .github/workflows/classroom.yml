@@ -1,12 +1,13 @@
 name: GitHub Classroom Workflow
 
-on: 
+on:
   push:
     branches: [ main ]
     paths-ignore:
       - '.github/workflows/*'
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   checks: write
@@ -43,7 +44,7 @@ jobs:
         with:
           test-name: Test 1 (n=1)
           setup-command: ''
-          command: "timeout 1 ./numofsolutions"
+          command: "timeout 1 ./build/numofsolutions"
           input: "1 1000"
           expected-output: "1"
           comparison-method: exact
@@ -55,7 +56,7 @@ jobs:
         with:
           test-name: Test 2 (n=4)
           setup-command: ''
-          command: "timeout 1 ./numofsolutions"
+          command: "timeout 1 ./build/numofsolutions"
           input: "4 1000"
           expected-output: "5"
           comparison-method: exact
@@ -67,7 +68,7 @@ jobs:
         with:
           test-name: Test 3 (n=10)
           setup-command: ''
-          command: "timeout 1 ./numofsolutions"
+          command: "timeout 1 ./build/numofsolutions"
           input: "10 1000"
           expected-output: "42"
           comparison-method: exact
@@ -79,7 +80,7 @@ jobs:
         with:
           test-name: Test 4 (n=20)
           setup-command: ''
-          command: "ulimit -Sv 8000 && timeout 1 ./numofsolutions || ( rc=$?;  if [ ${rc} -eq 124 ]; then echo \"Timeout\"; fi ; exit ${rc} ) "
+          command: "ulimit -Sv 8000 && timeout 1 ./build/numofsolutions || ( rc=$?;  if [ ${rc} -eq 124 ]; then echo \"Timeout\"; fi ; exit ${rc} ) "
           input: "20 1000"
           expected-output: "627"
           comparison-method: exact
@@ -91,7 +92,7 @@ jobs:
         with:
           test-name: Test 5 (n=49)
           setup-command: ''
-          command: "ulimit -Sv 8000 && timeout 1 ./numofsolutions || ( rc=$?;  if [ ${rc} -eq 124 ]; then echo \"Timeout\"; fi ; exit ${rc} ) "
+          command: "ulimit -Sv 8000 && timeout 1 ./build/numofsolutions || ( rc=$?;  if [ ${rc} -eq 124 ]; then echo \"Timeout\"; fi ; exit ${rc} ) "
           input: "49 1000000"
           expected-output: "173525"
           comparison-method: exact
@@ -103,7 +104,7 @@ jobs:
         with:
           test-name: Test 6 (n=100)
           setup-command: ''
-          command: "ulimit -Sv 8000 && timeout 1 ./numofsolutions || ( rc=$?;  if [ ${rc} -eq 124 ]; then echo \"Timeout\"; fi ; exit ${rc} ) "
+          command: "ulimit -Sv 8000 && timeout 1 ./build/numofsolutions || ( rc=$?;  if [ ${rc} -eq 124 ]; then echo \"Timeout\"; fi ; exit ${rc} ) "
           input: "100 1000000000000"
           expected-output: "190569292"
           comparison-method: exact
@@ -115,7 +116,7 @@ jobs:
         with:
           test-name: Test 7 (n=999)
           setup-command: ''
-          command: "ulimit -Sv 8000 && timeout 1 ./numofsolutions || ( rc=$?;  if [ ${rc} -eq 124 ]; then echo \"Timeout\"; fi ; exit ${rc} ) "
+          command: "ulimit -Sv 8000 && timeout 1 ./build/numofsolutions || ( rc=$?;  if [ ${rc} -eq 124 ]; then echo \"Timeout\"; fi ; exit ${rc} ) "
           input: "999 1000000000000"
           expected-output: "880444632250"
           comparison-method: exact
@@ -127,7 +128,7 @@ jobs:
         with:
           test-name: Test 8 (n=1000)
           setup-command: ''
-          command: "ulimit -Sv 8000 && timeout 1 ./numofsolutions || ( rc=$?;  if [ ${rc} -eq 124 ]; then echo \"Timeout\"; fi ; exit ${rc} ) "
+          command: "ulimit -Sv 8000 && timeout 1 ./build/numofsolutions || ( rc=$?;  if [ ${rc} -eq 124 ]; then echo \"Timeout\"; fi ; exit ${rc} ) "
           input: "1000 1000000000000"
           expected-output: "692149727991"
           comparison-method: exact
@@ -139,7 +140,7 @@ jobs:
         with:
           test-name: Test 9 (n=1001)
           setup-command: ''
-          command: "ulimit -Sv 8000 && timeout 1 ./numofsolutions || ( rc=$?;  if [ ${rc} -eq 124 ]; then echo \"Timeout\"; fi ; exit ${rc} ) "
+          command: "ulimit -Sv 8000 && timeout 1 ./build/numofsolutions || ( rc=$?;  if [ ${rc} -eq 124 ]; then echo \"Timeout\"; fi ; exit ${rc} ) "
           input: "1001 1000000000000"
           expected-output: "13218349796"
           comparison-method: exact
@@ -151,7 +152,7 @@ jobs:
         with:
           test-name: Test 10 (n=10000)
           setup-command: ''
-          command: "ulimit -Sv 8000 && timeout 3 ./numofsolutions || ( rc=$?;  if [ ${rc} -eq 124 ]; then echo \"Timeout\"; fi ; exit ${rc} ) "
+          command: "ulimit -Sv 8000 && timeout 3 ./build/numofsolutions || ( rc=$?;  if [ ${rc} -eq 124 ]; then echo \"Timeout\"; fi ; exit ${rc} ) "
           input: "10000 1000000000000"
           expected-output: "906916435144"
           comparison-method: exact
@@ -174,7 +175,7 @@ jobs:
           runners: test-1,test-2,test-3,test-4,test-5,test-6,test-7,test-8,test-9,test-10
       - name: Memory leaks
         run: |
-             echo "1000 1000000" | valgrind --tool=memcheck --leak-check=full --undef-value-errors=no --error-exitcode=111 ./numofsolutions
+             echo "1000 1000000" | valgrind --tool=memcheck --leak-check=full --undef-value-errors=no --error-exitcode=111 ./build/numofsolutions
       - name: Checkout
         uses: actions/checkout@v4
       - name: CPD
