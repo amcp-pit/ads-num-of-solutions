@@ -12,4 +12,5 @@ int main () {
 
 unsigned long long num_of_solutions(int n, unsigned long long mod){
   /* Здесь ваш код */
+
 }
